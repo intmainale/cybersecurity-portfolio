@@ -1,7 +1,20 @@
-services:
-  mailhog:
-    image: mailhog/mailhog:latest
-    restart: always
-    ports:
-      - 1025:1025
-      - 8025:8025
+  services:
+    mailhog:
+      image: mailhog/mailhog:latest
+      restart: always
+      ports:
+        - 1025:1025
+        - 8025:8025
+
+    phishing_app:
+        build: .
+        ports:
+          - "5000:5000"
+        working_dir: /app
+        environment:
+          - SMTP_HOST=mailhog 
+          - SMTP_PORT=1025
+        depends_on:
+          - mailhog
+        volumes:
+          - .:/app
